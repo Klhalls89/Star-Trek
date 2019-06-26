@@ -1,7 +1,7 @@
 module.exports = {
   development: {
     client: 'pg',
-    connection: 'postgres://localhost/starTrek',
+    connection: 'postgres://localhost/startrek',
     useNullAsDefault: true,
     migrations: {
       directory: './db/migrations'
