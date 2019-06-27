@@ -5,7 +5,7 @@ exports.up = function(knex) {
       table.increments('id').primary();
       table.string('name');
       table.string('actor');
-      table.array('ship');
+      table.string('ship');
       table.string('rank');
 
       table.timestamps(true, true)
@@ -15,11 +15,11 @@ exports.up = function(knex) {
       table.increments('id').primary();
       table.string('name');
       table.string('character');
-      table.array('show');
+      table.string('show');
       table.string('nationality');
       table.integer('startrek_id').unsigned()
       table.foreign('startrek_id')
-        .references('startrek.data')
+        .references('startrek.id')
 
       table.timestamps(true, true)
     })
