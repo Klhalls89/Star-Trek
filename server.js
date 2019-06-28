@@ -1,3 +1,4 @@
+const enviroment = process.env.NODE_ENV || 'development';
 const express = require('express');
 const app = express(); 
 app.listen(3000, () => {
