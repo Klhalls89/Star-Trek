@@ -10,13 +10,12 @@ app.listen(app.get('port'), () => {
  console.log(`App is running on 3000`)
 });
 
+app.get('/', (request, response) => {
+  response.status(200).json('Engage')
+})
 
 app.get('/favicon.ico', (request, response) => {
   response.status(200).json('Favicon?')
-})
-
-app.get('/', (request, response) => {
-  response.status(200).json('Engage')
 })
 
 app.get('/api/v1/startrek', (request, response) => {
@@ -28,3 +27,39 @@ app.get('/api/v1/startrek', (request, response) => {
       response.status(500).json({ error });
     });
 });
+
+app.get('/api/v1/actors', (request, response) => {
+  database('actors').select()
+    .then((actors) => {
+      response.status(200).json(startrek);
+    })
+    .catch((error) => {
+      response.status(500).json({ error });
+    })
+})
+
+//write a git for each posting with an id
+
+app.post('/api/v1/startrek', (request, response) => {
+  let startrek = request.body;
+
+  for (let requiredParameter of ['name', 'actor', 'ship', 'rank']) {
+    if (!startrek[requiredParameter]) {
+      return response
+        .status(422)
+        .send({ error: `expected format: {name: <String>, actor: <String>, 
+                                          ship: <String>, rank: <String>} 
+                                          you're missing a required property.`})
+    }
+  }
+
+  database('startrek').insert(startrek, 'id')
+    .then(startrek => {
+      response.status(201).json({ id: startrek[0] })
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
+});
+
+
