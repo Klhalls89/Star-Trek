@@ -51,10 +51,21 @@ app.get('/api/v1/actors', (request, response) => {
     })
 })
 
+app.get('/api/v1/actors/:id', (request, response) => {
+  const id = parseInt(request.params.id, 10);
+  database('actors').where('id', id).select()
+    .then((actors) =>{
+      if (actors.length > 0) {
+        response.status(200).json(actors);
+      } else {
+        response.status(404).json({ error: 'there are no actor with that id' });
+      }
+    })
+    .catch(error => response.status(500).json({ error }));
+});
 
 app.post('/api/v1/startrek', (request, response) => {
   let startrek = request.body;
-
   for (let requiredParameter of ['name', 'actor', 'ship', 'rank']) {
     if (!startrek[requiredParameter]) {
       return response
@@ -64,7 +75,6 @@ app.post('/api/v1/startrek', (request, response) => {
                                           you're missing a required property.`})
     }
   }
-
   database('startrek').insert(startrek, 'id')
     .then(startrek => {
       response.status(201).json({ id: startrek[0] })
@@ -74,4 +84,35 @@ app.post('/api/v1/startrek', (request, response) => {
     });
 });
 
+app.post('/api/v1/actors', (request, response) => {
+  let actors= request.body;
+  for (let requiredParameter of ['name', 'character', 'show', 'nationality']) {
+    if (!actors[requiredParameter]) {
+      return response
+        .status(422)
+        .send({ error: `expected format: {name: <String>, character: <String>, 
+                                          show: <String>, nationality: <String>} 
+                                          you're missing a required property.`})
+    }
+  }
+  database('actors').insert(actors, 'id')
+    .then(actors => {
+      response.status(201).json({ id: actors[0] })
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
+});
 
+app.delete('/api/v1/actors/:id', (request, response) => {
+  const id = parseInt(request.params.id, 10);
+  database('actors').where('id', id).select()
+    .then((actors) =>{
+      if (actors.length > 0) {
+        response.status(202).json('deleted actor');
+      } else {
+        response.status(404).json({ error: 'there are no actor with that id' });
+      }
+    })
+    .catch(error => response.status(500).json({ error }));
+});
