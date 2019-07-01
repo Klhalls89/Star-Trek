@@ -80,16 +80,25 @@ app.get('/api/v1/actors', (request, response) => {
 })
 
 app.get('/api/v1/actors/:id', (request, response) => {
+  //get method for actors by id
   const id = parseInt(request.params.id, 10);
+  // defining id and parsing the integer off the request params
   database('actors').where('id', id).select()
+  //grabbing the actors db and using where and select to grab the matching id
     .then((actors) =>{
+      //usgin then on the promise that comes back with an actor
       if (actors.length > 0) {
-        response.status(200).json(actors);
+        //if actors has length
+        response.status(200).json(actor);
+        //response 200 for okay
       } else {
+        //other wise
         response.status(404).json({ error: 'there are no actor with that id' });
+        //404 for not foun and sending an error message
       }
     })
     .catch(error => response.status(500).json({ error }));
+    //catching the error
 });
 
 app.post('/api/v1/startrek', (request, response) => {
