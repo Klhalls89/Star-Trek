@@ -132,22 +132,33 @@ app.post('/api/v1/startrek', (request, response) => {
 });
 
 app.post('/api/v1/actors', (request, response) => {
+  //post for actors db
   let actors= request.body;
+  //defining actors as the request body
   for (let requiredParameter of ['name', 'character', 'show', 'nationality']) {
+    //defining requiredParameters for actors
     if (!actors[requiredParameter]) {
+      //id the RP arn't there sending back
       return response
         .status(422)
+        //422 for unprocessable entry
         .send({ error: `expected format: {name: <String>, character: <String>, 
                                           show: <String>, nationality: <String>} 
                                           you're missing a required property.`})
+        //sending the proper format
     }
   }
   database('actors').insert(actors, 'id')
-    .then(actors => {
-      response.status(201).json({ id: actors[0] })
+  //if it is processable inserting the actor to the db
+    .then(actor => {
+      //using .then to interact with the promise
+      response.status(201).json({ id: actor[0] })
+      //sending a response of 201 for newly created
     })
     .catch(error => {
+      //catinging and error
       response.status(500).json({ error });
+      //500 for server error
     });
 });
 
