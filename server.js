@@ -64,12 +64,18 @@ app.get('/api/v1/startrek/:id', (request, response) => {
 });
 
 app.get('/api/v1/actors', (request, response) => {
+  //get endpoint for our main actors page this takes in the request and response
   database('actors').select()
+  //select method on the actors database
     .then((actors) => {
+      //then after the promise comes back...
       response.status(200).json(actors);
+      //200 for okay
     })
     .catch((error) => {
+      //if it comes back wrong catching it...
       response.status(500).json({ error });
+      //500 server error
     })
 })
 
