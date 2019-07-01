@@ -169,8 +169,8 @@ app.delete('/api/v1/startrek/:id', (request, response) => {
   database('startrek').where('id', id).select()
   //using where and select to delete the matching charcter
     .then((startrek) =>{
-      if (startrek.length > 0) {
-        //if startrek has length
+      if (id == actor.id) {
+        //if id matches
         response.status(202).json('deleted Star Trek character :.(');
         //202 for deleted content along with a message
       } else {
@@ -189,8 +189,8 @@ app.delete('/api/v1/actors/:id', (request, response) => {
   //defining the id as the parsed integer from the request paramater
   database('actors').where('id', id).select()
     //using where and select to delete the matching actor
-    .then((actors) =>{
-      if (actors.length > 0) {
+    .then((actor) =>{
+      if (id == actor.id) {
         response.status(202).json('deleted actor');
         //202 for deleted content along with a message
       } else {
