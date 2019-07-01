@@ -104,6 +104,19 @@ app.post('/api/v1/actors', (request, response) => {
     });
 });
 
+app.delete('/api/v1/startrek/:id', (request, response) => {
+  const id = parseInt(request.params.id, 10);
+  database('startrek').where('id', id).select()
+    .then((startrek) =>{
+      if (startrek.length > 0) {
+        response.status(202).json('deleted Star Trek character :.(');
+      } else {
+        response.status(404).json({ error: 'there are no startrek character with that id' });
+      }
+    })
+    .catch(error => response.status(500).json({ error }));
+});
+
 app.delete('/api/v1/actors/:id', (request, response) => {
   const id = parseInt(request.params.id, 10);
   database('actors').where('id', id).select()
