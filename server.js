@@ -102,22 +102,32 @@ app.get('/api/v1/actors/:id', (request, response) => {
 });
 
 app.post('/api/v1/startrek', (request, response) => {
+  //posting end point for startrek db
   let startrek = request.body;
+  //defining startrek ad the request body
   for (let requiredParameter of ['name', 'actor', 'ship', 'rank']) {
+    //definging requiredParameters 
     if (!startrek[requiredParameter]) {
+      //if their startrek entry does not have the req.prams...
       return response
         .status(422)
+        //return 422 for unprocessable entry 
         .send({ error: `expected format: {name: <String>, actor: <String>, 
                                           ship: <String>, rank: <String>} 
                                           you're missing a required property.`})
+        //shows them the proper format for an entry
     }
   }
   database('startrek').insert(startrek, 'id')
+  // if entry is processable using the insert method to add it
     .then(startrek => {
+      //then sending back 201 for newly created and giving it an id to send them
       response.status(201).json({ id: startrek[0] })
     })
     .catch(error => {
+      //catching a server error or unprocessable entry
       response.status(500).json({ error });
+      //500 server error
     });
 });
 
