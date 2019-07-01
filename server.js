@@ -184,14 +184,21 @@ app.delete('/api/v1/startrek/:id', (request, response) => {
 });
 
 app.delete('/api/v1/actors/:id', (request, response) => {
+  //delete endpoint for actors with and id
   const id = parseInt(request.params.id, 10);
+  //defining the id as the parsed integer from the request paramater
   database('actors').where('id', id).select()
+    //using where and select to delete the matching actor
     .then((actors) =>{
       if (actors.length > 0) {
         response.status(202).json('deleted actor');
+        //202 for deleted content along with a message
       } else {
+        //other wise...
         response.status(404).json({ error: 'there are no actor with that id' });
+       // a 404 not found and a message
       }
     })
     .catch(error => response.status(500).json({ error }));
+    //catch the server error and send back 500
 });
