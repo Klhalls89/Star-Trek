@@ -108,7 +108,7 @@ app.delete('/api/v1/startrek/:id', (request, response) => {
   const id = parseInt(request.params.id, 10);
   database('startrek').where('id', id).select()
     .then((startrek) =>{
-      if (startrek.length > 0) {
+      if (id == actor.id) {
         response.status(202).json('deleted Star Trek character :.(');
       } else {
         response.status(404).json({ error: 'there are no startrek character with that id' });
@@ -121,7 +121,7 @@ app.delete('/api/v1/actors/:id', (request, response) => {
   const id = parseInt(request.params.id, 10);
   database('actors').where('id', id).select()
     .then((actors) =>{
-      if (actors.length > 0) {
+      if (id == actor.id) {
         response.status(202).json('deleted actor');
       } else {
         response.status(404).json({ error: 'there are no actor with that id' });
