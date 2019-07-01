@@ -28,17 +28,29 @@ app.get('/api/v1/startrek', (request, response) => {
     });
 });
 
+app.get('/api/v1/startrek/:id', (request, response) => {
+  const id = parseInt(request.params.id, 10);
+  database('startrek').where('id', id).select()
+    .then((startrek) =>{
+      if (startrek.length > 0) {
+        response.status(200).json(startrek);
+      } else {
+        response.status(404).json({ error: 'there are no characters with that id' });
+      }
+    })
+    .catch(error => response.status(500).json({ error }));
+});
+
 app.get('/api/v1/actors', (request, response) => {
   database('actors').select()
     .then((actors) => {
-      response.status(200).json(startrek);
+      response.status(200).json(actors);
     })
     .catch((error) => {
       response.status(500).json({ error });
     })
 })
 
-//write a git for each posting with an id
 
 app.post('/api/v1/startrek', (request, response) => {
   let startrek = request.body;
