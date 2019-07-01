@@ -163,16 +163,24 @@ app.post('/api/v1/actors', (request, response) => {
 });
 
 app.delete('/api/v1/startrek/:id', (request, response) => {
+  //delet endpoint for a star trek character with an id
   const id = parseInt(request.params.id, 10);
+  //defining id as the parsed integer from the request params
   database('startrek').where('id', id).select()
+  //using where and select to delete the matching charcter
     .then((startrek) =>{
       if (startrek.length > 0) {
+        //if startrek has length
         response.status(202).json('deleted Star Trek character :.(');
+        //202 for deleted content along with a message
       } else {
+        //other wise...
         response.status(404).json({ error: 'there are no startrek character with that id' });
+        // a 404 not found and a message
       }
     })
     .catch(error => response.status(500).json({ error }));
+    //catch the server error and send back 500
 });
 
 app.delete('/api/v1/actors/:id', (request, response) => {
